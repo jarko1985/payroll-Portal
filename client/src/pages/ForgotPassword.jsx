@@ -33,7 +33,7 @@ const ForgotPassword = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "http://www.localhost:3001/auth/forgot-password",
+        "https://payroll-portal-backend.onrender.com/auth/forgot-password",
         values
       );
       console.log(response);

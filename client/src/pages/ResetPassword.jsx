@@ -38,7 +38,8 @@ const ResetPassword = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "http://www.localhost:3001/auth/reset-password/" + token,
+        "https://payroll-portal-backend.onrender.com/auth/reset-password/" +
+          token,
         values
       );
       console.log(response);

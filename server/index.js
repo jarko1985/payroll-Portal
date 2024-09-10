@@ -10,7 +10,8 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://payroll-portal-backend.onrender.com",
+    methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
 );
@@ -40,6 +41,6 @@ app.use("/", (req, res) => {
   res.json({ message: "Hello World" });
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3001, () => {
   console.log(`Server Started Listening on PORT ${process.env.PORT}`);
 });

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { EmployeeContext } from "@/context/EmployeeContext";
-import Pagination from "../../utils/pagination";
+import Pagination from "../utils/pagination";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";

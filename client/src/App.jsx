@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -10,16 +10,13 @@ import Sidebar from "./components/Sidebar";
 import Employees from "./components/Employees";
 import Salaries from "./components/Salaries";
 import { initialEmployees, initialSalaryHistory } from "./data";
-import {
-  getFromLocalStorage,
-  saveToLocalStorage,
-} from "../utils/local-storage";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import ProtectedRoute from "../utils/ProtectedRoute";
+import { getFromLocalStorage, saveToLocalStorage } from "@/utils/local-storage";
+import Register from "@/pages/Register";
+import Login from "@/pages/Login";
+import ProtectedRoute from "@/utils/ProtectedRoute";
 import HistoryLogs from "./components/HistoryLogs";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
 import { EmployeeProvider } from "./context/EmployeeContext";
 import { SalaryHistoryProvider } from "./context/SalaryHistoryContext";
 import { UserProvider } from "./context/UserContext";

@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import {
   getFromLocalStorage,
   saveToLocalStorage,
-} from "../../utils/local-storage";
+} from "../utils/local-storage";
 
 export const UserContext = createContext();
 

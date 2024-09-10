@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import {
   getFromLocalStorage,
   saveToLocalStorage,
-} from "../../utils/local-storage";
+} from "../utils/local-storage";
 import { initialEmployees } from "../data";
 
 export const EmployeeContext = createContext();

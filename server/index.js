@@ -36,6 +36,10 @@ if (isProduction) {
   console.log("Running in development mode");
 }
 
+app.use("/", (req, res) => {
+  res.json({ message: "Hello World" });
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Server Started Listening on PORT ${process.env.PORT}`);
 });

@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://payroll-portal-backend.onrender.com",
+    origin: "https://payroll-portal-frontend.onrender.com",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })

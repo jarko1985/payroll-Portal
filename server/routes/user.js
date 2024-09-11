@@ -44,7 +44,7 @@ router.post("/login", async (request, response) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    response.json({ status: 404 }, { message: "User Does not Exist!!!" });
+    response.json({ success: false, message: "User Does not Exist!!" });
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
@@ -78,11 +78,9 @@ router.post("/forgot-password", async (req, res) => {
         .json({ success: false, message: "User Not Found!!" });
     }
 
-    const token = jwt.sign(
-      { username: user.username },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -91,6 +89,7 @@ router.post("/forgot-password", async (req, res) => {
         pass: process.env.EMAIL_PASS,
       },
     });
+
     const encodedToken = encodeURIComponent(token).replace(/\./g, "%2E");
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -119,16 +118,24 @@ router.post("/forgot-password", async (req, res) => {
 router.post("/reset-password/:token", async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
-
   try {
-    // Verify the token
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-    const id = decoded.id; // Extract the user ID from the token
+    const id = decoded.id;
 
-    // Hash the new password
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid token payload. User ID not found.",
+      });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Update the user's password in the database
     await User.findByIdAndUpdate(id, { password: hashedPassword });
 
     return res.json({
@@ -136,7 +143,7 @@ router.post("/reset-password/:token", async (req, res) => {
       message: "Password Updated Successfully!!",
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error in resetting password:", error);
     return res.status(400).json({
       success: false,
       message: "Invalid or Expired Token!",

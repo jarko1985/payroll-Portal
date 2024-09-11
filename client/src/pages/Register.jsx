@@ -41,7 +41,7 @@ const Register = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://payroll-portal-backend.onrender.com/auth/signup",
+        "http://localhost:3001/auth/signup",
         values
       );
       if (response.data.success === true) {

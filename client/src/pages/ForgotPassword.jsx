@@ -33,7 +33,7 @@ const ForgotPassword = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://payroll-portal-backend.onrender.com/auth/forgot-password",
+        "http://localhost:3001/auth/forgot-password",
         values
       );
       console.log(response);
@@ -41,9 +41,11 @@ const ForgotPassword = () => {
       if (response.data.success === true) {
         toast.success("Check your email!!");
         form.reset();
+      } else {
+        console.log(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -112,12 +114,6 @@ const ForgotPassword = () => {
             </div>
           </form>
         </Form>
-        {/* <p className="text-center pt-4">
-          Already Registered?{" "}
-          <span className="font-semibold underline">
-            <a href="/login">Login here</a>
-          </span>
-        </p> */}
       </div>
       <Toaster />
     </div>

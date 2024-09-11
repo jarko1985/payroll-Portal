@@ -1,23 +1,18 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { EmployeeContext } from "@/context/EmployeeContext";
 import Pagination from "../utils/pagination";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+
+const columns = [
+  "Staff ID",
+  "Name",
+  "Joining Date",
+  "Basic Salary",
+  "Salary Allowances",
+  "Actions",
+];
 
 const Employees = () => {
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   axios.get("http://localhost:3001/auth/verify").then((res) => {
-  //     if (res.data.success === true) {
-  //       console.log("Authorized!!");
-  //       console.log(res.data);
-  //     } else {
-  //       navigate("/login");
-  //       console.log("UnAuthorized!!");
-  //     }
-  //   });
-  // });
   const { employees, setEmployees } = useContext(EmployeeContext);
   const [newEmployee, setNewEmployee] = useState({
     staffId: "",
@@ -26,6 +21,9 @@ const Employees = () => {
     basicSalary: "",
     salaryAllowances: "",
   });
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const employeesPerPage = 5;
@@ -49,7 +47,17 @@ const Employees = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEmployees([...employees, newEmployee]);
+    if (isEditing) {
+      const updatedEmployees = [...employees];
+      updatedEmployees[editIndex] = newEmployee;
+      setEmployees(updatedEmployees);
+      setIsEditing(false);
+      toast.success("Employee updated successfully!");
+    } else {
+      setEmployees([...employees, newEmployee]);
+      toast.success("Employee added successfully!");
+    }
+
     setNewEmployee({
       staffId: "",
       name: "",
@@ -57,6 +65,27 @@ const Employees = () => {
       basicSalary: "",
       salaryAllowances: "",
     });
+  };
+
+  const handleEdit = (index) => {
+    const employeeToEdit = employees[index];
+
+    const formattedDate = new Date(employeeToEdit.joiningDate)
+      .toISOString()
+      .split("T")[0];
+
+    setNewEmployee({
+      ...employeeToEdit,
+      joiningDate: formattedDate,
+    });
+    setIsEditing(true);
+    setEditIndex(index);
+  };
+
+  const handleDelete = (index) => {
+    const updatedEmployees = employees.filter((_, i) => i !== index);
+    setEmployees(updatedEmployees);
+    toast.success("Employee deleted successfully!");
   };
 
   return (
@@ -129,7 +158,7 @@ const Employees = () => {
           type="submit"
           className="px-4 py-2 bg-[#F72717] text-white rounded transition-transform hover:scale-110 duration-300 font-semibold"
         >
-          Add Employee
+          {isEditing ? "Update Employee" : "Add Employee"}
         </button>
       </form>
 
@@ -138,11 +167,9 @@ const Employees = () => {
       <table className="min-w-full bg-white">
         <thead className="bg-[#F72717] text-white">
           <tr>
-            <th className="px-4 py-2 border">Staff ID</th>
-            <th className="px-4 py-2 border">Name</th>
-            <th className="px-4 py-2 border">Joining Date</th>
-            <th className="px-4 py-2 border">Basic Salary</th>
-            <th className="px-4 py-2 border">Salary Allowances</th>
+            {columns.map((col) => (
+              <th className="px-4 py-2 border">{col}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -153,6 +180,20 @@ const Employees = () => {
               <td className="px-4 py-2 border">{employee.joiningDate}</td>
               <td className="px-4 py-2 border">{employee.basicSalary}</td>
               <td className="px-4 py-2 border">{employee.salaryAllowances}</td>
+              <td className="px-4 py-2 border">
+                <button
+                  onClick={() => handleEdit(index)}
+                  className="mr-2 px-2 py-1 bg-blue-500 text-white rounded"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(index)}
+                  className="px-2 py-1 bg-red-500 text-white rounded"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -164,6 +205,7 @@ const Employees = () => {
         paginate={paginate}
         currentPage={currentPage}
       />
+      <Toaster />
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { SalaryHistoryContext } from "../context/SalaryHistoryContext";
 
+const columns = ["Staff ID", "Name", "Total Salary", "End Of Service"];
+
 const HistoryLogs = () => {
   const { salaryHistory } = useContext(SalaryHistoryContext);
 
@@ -29,10 +31,9 @@ const HistoryLogs = () => {
             <table className="min-w-full bg-white">
               <thead className="bg-[#F72717] text-white">
                 <tr>
-                  <th className="px-4 py-2 border">Staff ID</th>
-                  <th className="px-4 py-2 border">Name</th>
-                  <th className="px-4 py-2 border">Total Salary</th>
-                  <th className="px-4 py-2 border">End-of-Service</th>
+                  {columns.map((col) => (
+                    <th className="px-4 py-2 border">{col}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>

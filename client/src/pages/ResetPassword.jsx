@@ -38,19 +38,21 @@ const ResetPassword = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://payroll-portal-backend.onrender.com/auth/reset-password/" +
-          token,
+        "http://localhost:3001/auth/reset-password/" + token,
         values
       );
-      console.log(response);
+      console.log("Response from server:", response);
 
       if (response.data.success === true) {
-        toast.success("Password Reset Successful!!");
+        toast.success(response.data.message || "Password Reset Successful!!");
         form.reset();
         navigate("/login");
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.error("Error occurred:", error);
+      toast.error(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -119,12 +121,6 @@ const ResetPassword = () => {
             </div>
           </form>
         </Form>
-        {/* <p className="text-center pt-4">
-          Already Registered?{" "}
-          <span className="font-semibold underline">
-            <a href="/login">Login here</a>
-          </span>
-        </p> */}
       </div>
       <Toaster />
     </div>

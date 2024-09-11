@@ -53,10 +53,7 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Layout>
-                      <Employees
-                        employees={employees}
-                        setEmployees={setEmployees}
-                      />
+                      <Employees />
                     </Layout>
                   </ProtectedRoute>
                 }
@@ -66,11 +63,7 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Layout>
-                      <Salaries
-                        employees={employees}
-                        salaryHistory={salaryHistory}
-                        setSalaryHistory={setSalaryHistory}
-                      />
+                      <Salaries />
                     </Layout>
                   </ProtectedRoute>
                 }

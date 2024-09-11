@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "@/context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -40,25 +40,29 @@ const Login = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://payroll-portal-backend.onrender.com/auth/login",
+        "http://localhost:3001/auth/login",
         values,
         {
           withCredentials: true,
         }
       );
-      if (response.data.success === true) {
-        toast.success("User Logged in Successfully!!");
-      }
-      localStorage.setItem("isLoggedIn", "true");
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-      }
-      const { username } = response?.data?.user;
-      console.log(username);
-      login({ username });
 
-      navigate("/employees");
+      if (response.data.status === true) {
+        localStorage.setItem("isLoggedIn", "true");
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+        }
+        const { username } = response?.data?.user;
+        login({ username });
+        toast.success("User Logged in Successfully!!");
+        setTimeout(() => {
+          navigate("/employees");
+        }, 3000);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
+      console.log(error.response);
       toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);

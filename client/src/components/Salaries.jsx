@@ -4,18 +4,20 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const columns = [
+  "Staff ID",
+  "Name",
+  "Basic Salary",
+  "Salary Allowances",
+  "Additions",
+  "Deductions",
+  "End-of-Service (Gratuity)",
+  "Total Salary",
+];
+
 const Salaries = () => {
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   axios.get("http://localhost:3001/auth/verify").then((res) => {
-  //     if (res.data.success === true) {
-  //       console.log("Authorized!!");
-  //     } else {
-  //       navigate("/login");
-  //       console.log("UnAuthorized!!");
-  //     }
-  //   });
-  // });
+
   const { employees } = useContext(EmployeeContext);
   const { addSalaryHistory } = useContext(SalaryHistoryContext);
   const [salaryMonth, setSalaryMonth] = useState("");
@@ -64,9 +66,8 @@ const Salaries = () => {
       };
     });
 
-    addSalaryHistory(processedSalaries, salaryMonth, salaryYear); // Save to context
+    addSalaryHistory(processedSalaries, salaryMonth, salaryYear);
 
-    // Navigate to history logs
     navigate("/history-logs");
   };
 
@@ -107,14 +108,9 @@ const Salaries = () => {
           <table className="min-w-full bg-white">
             <thead className="bg-[#F72717] text-white">
               <tr>
-                <th className="px-4 py-2 border">Staff ID</th>
-                <th className="px-4 py-2 border">Name</th>
-                <th className="px-4 py-2 border">Basic Salary</th>
-                <th className="px-4 py-2 border">Salary Allowances</th>
-                <th className="px-4 py-2 border">Additions</th>
-                <th className="px-4 py-2 border">Deductions</th>
-                <th className="px-4 py-2 border">End-of-Service (Gratuity)</th>
-                <th className="px-4 py-2 border">Total Salary</th>
+                {columns.map((col) => (
+                  <th className="px-4 py-2 border">{col}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
